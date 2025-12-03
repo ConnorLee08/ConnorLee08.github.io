@@ -57,7 +57,7 @@ body::-webkit-scrollbar {
 }
 
 .scroll-hint.flicker {
-  animation: hintFlicker 1s ease-in-out infinite;
+  animation: hintFlicker 2s ease-in-out infinite;
 }
 
 /* ---- Intro Title (2001 / A Space Odyssey) ---- */
@@ -119,6 +119,80 @@ body::-webkit-scrollbar {
   font-size: clamp(1rem, 2.5vw, 1.6rem);
   letter-spacing: 0.35em;
   text-transform: uppercase;
+}
+
+.glitch-title-wrapper {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.glitch-title {
+  position: relative;
+  font-family: "Fira Code", monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #e5e5e5;
+  font-weight: 600;
+}
+
+#introTitleMain {
+  font-size: clamp(3rem, 8vw, 6rem);
+}
+
+#introTitleSub {
+  font-size: clamp(1rem, 3vw, 1.6rem);
+  opacity: 0.9;
+}
+
+.glitch-title.glitch-active::before,
+.glitch-title.glitch-active::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  color: var(--primary-color, #ecc1c1);
+  background: transparent;
+  pointer-events: none;
+}
+
+.glitch-title.glitch-active::before {
+  color: var(--secondary-color, #bca3e9);
+  animation: glitch-anim-text 0.3s ease both;
+}
+
+.glitch-title.glitch-active::after {
+  color: var(--primary-color, #ecc1c1);
+  animation: glitch-anim-text 0.3s ease reverse both;
+}
+
+@keyframes glitch-anim-text {
+  0% {
+    transform: translate(0, 0);
+    clip-path: inset(0 0 0 0);
+  }
+  20% {
+    transform: translate(-3px, 2px);
+    clip-path: inset(50% 0 20% 0);
+  }
+  40% {
+    transform: translate(2px, -1px);
+    clip-path: inset(20% 0 60% 0);
+  }
+  60% {
+    transform: translate(-2px, 1px);
+    clip-path: inset(80% 0 5% 0);
+  }
+  80% {
+    transform: translate(2px, -2px);
+    clip-path: inset(30% 0 45% 0);
+  }
+  100% {
+    transform: translate(0, 0);
+    clip-path: inset(0 0 0 0);
+  }
 }
 
 /* Flicker animations reused */

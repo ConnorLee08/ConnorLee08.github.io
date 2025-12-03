@@ -166,37 +166,60 @@ document.addEventListener('DOMContentLoaded', () => {
     doReset();
   }
 
+  function playTitleGlitch() {
+  const main = document.getElementById("introYear");
+  const sub = document.getElementById("introTitleText");
+
+  // remove existing glitch state
+  main.classList.remove("glitch-active");
+  sub.classList.remove("glitch-active");
+
+  // trigger reflow to restart animation
+  void main.offsetWidth;
+  void sub.offsetWidth;
+
+  // add glitch class back
+  main.classList.add("glitch-active");
+  sub.classList.add("glitch-active");
+
+  // remove after animation finishes (optional)
+  setTimeout(() => {
+    main.classList.remove("glitch-active");
+    sub.classList.remove("glitch-active");
+  }, 300);
+}
+
+
   function handleFirstScroll() {
-    if (!scrollDetectionEnabled || introStarted) return;
-    forceScrollReset();
-    introStarted = true;
-    hideScrollHint(); // Hide scroll hint on first scroll
+  if (!scrollDetectionEnabled || introStarted) return;
+  forceScrollReset();
+  introStarted = true;
+  hideScrollHint();
 
-    // Start intro animation only after scroll
+  setTimeout(() => {
+    introTitle.classList.add('fade-in');
+    introTitle.style.display = '';
+
+    // 1s after showing title: play glitch
     setTimeout(() => {
-      introTitle.classList.add('fade-in');
-      introTitle.style.display = '';
+      playTitleGlitch();
 
+      // 0.35s after glitch starts: shoot up + warp
       setTimeout(() => {
-        introTitle.classList.add('glow');
-        introTitle.style.animation = 'glowFlash 1.2s ease-in-out 1'; // Only flash twice
-      }, 1000);
-
-      introTitle.addEventListener('animationend', () => {
-        introTitle.classList.remove('glow');
-        introTitle.style.animation = '';
-        // Shoot up and trigger star warp
         introTitle.classList.add('shoot-up');
         warpStars();
-        // UI reveal starts after shoot-up animation is complete (1.6s)
+
+        // after shoot-up transition (matches CSS: 1.6s)
         setTimeout(() => {
           introTitle.classList.remove('fade-in', 'shoot-up');
           introTitle.style.display = 'none';
           startIntroSequence();
-        }, 600); // match shoot-up transition duration in CSS
-      }, { once: true });
-    }, 100); // slight delay after scroll
-  }
+        }, 400);
+      }, 550);
+    }, 1000);
+  }, 100);
+}
+
   window.addEventListener('scroll', handleFirstScroll, { once: true });
 
   // Star warp effect: fast acceleration, slower deceleration, UI reveal is independent
@@ -252,15 +275,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2s: fade in box (opacity: 1, still transparent)
     setTimeout(() => {
       floatingBox.classList.add('visible');
-    }, 1500);
+    }, 800);
     // 2.5s: fade in box background, border, shadow
     setTimeout(() => {
       floatingBox.classList.add('background-visible');
-    }, 2000);
+    }, 1500);
     // 3s: show subtitle
     setTimeout(() => {
       pageSubtitle.classList.add('visible');
-    }, 2500);
+    }, 2000);
     // 3.5s: reveal text lines one by one
     setTimeout(() => {
       const lines = Array.from(pageText.querySelectorAll('.text-line'));
@@ -269,7 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
           line.classList.add('visible');
         }, i * 350);
       });
-    }, 3000);
+    }, 2500);
   }
 
   // =========================
