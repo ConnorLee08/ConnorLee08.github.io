@@ -1,75 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2001 Analysis</title>
     <link href="./index.css" rel="stylesheet" />
-</head>
-<body>
-  <canvas id="backgroundCanvas"></canvas>
+  </head>
+  <body>
+    <canvas id="backgroundCanvas"></canvas>
 
-  
+    <!-- Scroll hint: flickers on load -->
+    <div id="scrollHint" class="scroll-hint">SCROLL TO ENTER</div>
 
-  <!-- Scroll hint: flickers on load -->
-  <div id="scrollHint" class="scroll-hint">SCROLL TO ENTER</div>
+    <!-- Intro title: appears on first scroll, flashes twice, then hides -->
+    <div id="introTitle" class="intro-title glitch-title-wrapper">
+      <span id="introYear" class="glitch-title" data-text="2001">2001</span>
+      <span id="introTitleText" class="glitch-title"
+        data-text="A SPACE ODYSSEY">A SPACE ODYSSEY</span>
+    </div>
 
-  <!-- Intro title: appears on first scroll, flashes twice, then hides -->
-  <div id="introTitle" class="intro-title glitch-title-wrapper">
-    <span id="introYear" class="glitch-title" data-text="2001">2001</span>
-    <span id="introTitleText" class="glitch-title" data-text="A SPACE ODYSSEY">A SPACE ODYSSEY</span>
-  </div>
+    <!-- Fixed header + navbar (shown after intro) -->
+    <header id="mainHeader">
+      <nav id="navbar">
+        <button class="nav-link" data-title="Dawn of Man"
+          data-target="content-dawn">
+          <span class="backdrop"></span>
+          <span class="galaxy"></span>
+          <span class="text">Dawn of Man</span>
+        </button>
 
-  <!-- Fixed header + navbar (shown after intro) -->
-  <header id="mainHeader">
-    <nav id="navbar">
-      <button class="nav-link" data-title="Dawn of Man"
-              data-text="Placeholder text: Dawn of Man sequence.">
-        Dawn of Man
-      </button>
-      <button class="nav-link" data-title="Space Station"
-              data-text="Placeholder text: Jupiter Mission sequence.">
-        Space Station
-      </button>
-      <button class="nav-link" data-title="The Moon"
-              data-text="Placeholder text: Beyond the Infinite sequence.">
-        The Moon
-      </button>
-      <button class="nav-link" data-title="Jupiter Mission: Hal's Retaliation"
-              data-text="Placeholder text: Dawn of Man sequence.">
-        Jupiter Mission: Hal's Retaliation
-      </button>
-      <button class="nav-link" data-title="Jupiter Mission: Hal's Shutdown"
-              data-text="Placeholder text: Dawn of Man sequence.">
-        Jupiter Mission: Hal's Shutdown
-      </button>
-      <button class="nav-link" data-title="Beyond the Infinite"
-              data-text="Placeholder text: Dawn of Man sequence.">
-        Beyond the Infinite
-      </button>
-    </nav>
-  </header>
+        <button class="nav-link" data-title="Space Station"
+          data-target="content-space-station">
+          <span class="backdrop"></span>
+          <span class="galaxy"></span>
+          <span class="text">Space Station</span>
+        </button>
 
-  <!-- Main scrollable content -->
-  <main>
-    <section class="content-section">
-      <div class="content-layout">
-        <!-- Title outside the floating box for persistent visibility -->
-        <h1 id="pageTitle">
-          2001: A Space Odyssey
-        </h1>
-        <!-- Sticky translucent box -->
-        <div id="floatingBox" class="floating-box">
-          <h2 id="pageSubtitle">Analysis and Visualization</h2>
-          <p id="pageText">
-            <span class="text-line">Placeholder analysis text goes here.</span><br>
-            <span class="text-line">This will be replaced when you click a navbar item.</span>
-          </p>
+        <button class="nav-link" data-title="The Moon"
+          data-target="content-moon">
+          <span class="backdrop"></span>
+          <span class="galaxy"></span>
+          <span class="text">The Moon</span>
+        </button>
+
+        <button class="nav-link" data-title="Jupiter Mission: Hal's Retaliation"
+          data-target="content-jupiter-hal-kill">
+          <span class="backdrop"></span>
+          <span class="galaxy"></span>
+          <span class="text">Jupiter Mission: Hal's Retaliation</span>
+        </button>
+
+        <button class="nav-link" data-title="Jupiter Mission: Hal's Shutdown"
+          data-target="content-jupiter-hal-death">
+          <span class="backdrop"></span>
+          <span class="galaxy"></span>
+          <span class="text">Jupiter Mission: Hal's Shutdown</span>
+        </button>
+
+        <button class="nav-link" data-title="Beyond the Infinite"
+          data-target="content-beyond-infinite">
+          <span class="backdrop"></span>
+          <span class="galaxy"></span>
+          <span class="text">Beyond the Infinite</span>
+        </button>
+      </nav>
+
+    </header>
+
+    <!-- Main scrollable content -->
+    <main>
+      <section class="content-section">
+        <div class="content-layout">
+          <!-- Title outside the floating box for persistent visibility -->
+          <h1 id="pageTitle">
+            2001: A Space Odyssey
+          </h1>
+          <!-- Sticky translucent box -->
+          <div id="floatingBox" class="floating-box">
+            <h2 id="pageSubtitle">Analysis and Visualization</h2>
+            <p id="pageText">
+              <span class="text-line">Placeholder analysis text goes
+                here.</span><br>
+              <span class="text-line">This will be replaced when you click a
+                navbar item.</span>
+            </p>
+          </div>
+
+          <div id="content-dawn" class="content-template" hidden>
+            <p class="text-line">This is a full paragraph about the Dawn of Man
+              sequence.</p>
+            <p class="text-line">You can add more paragraphs…</p>
+            <img class="content-image" src="images/dawn-of-man.jpg"
+              alt="Dawn of Man Still">
+          </div>
+
+          <div id="content-space-station" class="content-template" hidden>
+            <p class="text-line">Space Station section text line 1…</p>
+            <p class="text-line">More text here…</p>
+            <p class="text-line">More text here…</p>
+            <p class="text-line">More text here…</p>
+            <p class="text-line">More text here…</p>
+            <p class="text-line">More text here…</p>
+            <img class="content-image" src="images/space-station.jpg"
+              alt="Space Station">
+          </div>
+
+          <div id="content-moon" class="content-template" hidden>
+            <p class="text-line">This is a full paragraph about the moon
+              sequence.</p>
+            <p class="text-line">You can add more paragraphs…</p>
+            <img class="content-image" src="images/moon.jpg"
+              alt="Moon Scene Still">
+          </div>
+
+          <div id="content-jupiter-hal-kill" class="content-template" hidden>
+            <p class="text-line">Jupiter mission: hals retaliation section text
+              line 1…</p>
+            <p class="text-line">More text here…</p>
+            <img class="content-image" src="images/hal-retaliate.jpg"
+              alt="Hal's Retaliation Scene">
+          </div>
+
+          <div id="content-jupiter-hal-death" class="content-template" hidden>
+            <p class="text-line">This is a full paragraph about the Hal's
+              death</p>
+            <p class="text-line">You can add more paragraphs…</p>
+            <img class="content-image" src="images/hal-death.jpg"
+              alt="Hal's Death Still">
+          </div>
+
+          <div id="content-beyond-infinite" class="content-template" hidden>
+            <p class="text-line">Beyond The Infinite sequence section text line
+              1…</p>
+            <p class="text-line">More text here…</p>
+            <img class="content-image" src="images/beyond-infinite.jpg"
+              alt="Beyond The Infinite Scene">
+          </div>
         </div>
-      </div>
-    </section>
-  </main>
+      </section>
+    </main>
 
-  <script src="./index.js"></script>
-</body>
+    <script src="./index.js"></script>
+  </body>
 </html>

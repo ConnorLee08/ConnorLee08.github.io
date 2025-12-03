@@ -167,60 +167,62 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function playTitleGlitch() {
-  const main = document.getElementById("introYear");
-  const sub = document.getElementById("introTitleText");
+    const main = document.getElementById("introYear");
+    const sub = document.getElementById("introTitleText");
 
-  // remove existing glitch state
-  main.classList.remove("glitch-active");
-  sub.classList.remove("glitch-active");
-
-  // trigger reflow to restart animation
-  void main.offsetWidth;
-  void sub.offsetWidth;
-
-  // add glitch class back
-  main.classList.add("glitch-active");
-  sub.classList.add("glitch-active");
-
-  // remove after animation finishes (optional)
-  setTimeout(() => {
+    // remove existing glitch state
     main.classList.remove("glitch-active");
     sub.classList.remove("glitch-active");
-  }, 300);
-}
+
+    // trigger reflow to restart animation
+    void main.offsetWidth;
+    void sub.offsetWidth;
+
+    // add glitch class back
+    main.classList.add("glitch-active");
+    sub.classList.add("glitch-active");
+
+    // remove after animation finishes (optional)
+    setTimeout(() => {
+      main.classList.remove("glitch-active");
+      sub.classList.remove("glitch-active");
+    }, 300);
+  }
 
 
   function handleFirstScroll() {
-  if (!scrollDetectionEnabled || introStarted) return;
-  forceScrollReset();
-  introStarted = true;
-  hideScrollHint();
+    if (!scrollDetectionEnabled || introStarted) return;
+    forceScrollReset();
+    introStarted = true;
+    hideScrollHint();
 
-  setTimeout(() => {
-    introTitle.classList.add('fade-in');
-    introTitle.style.display = '';
-
-    // 1s after showing title: play glitch
     setTimeout(() => {
-      playTitleGlitch();
+      introTitle.classList.add('fade-in');
+      introTitle.style.display = '';
 
-      // 0.35s after glitch starts: shoot up + warp
+      // 1s after showing title: play glitch
       setTimeout(() => {
-        introTitle.classList.add('shoot-up');
-        warpStars();
+        playTitleGlitch();
 
-        // after shoot-up transition (matches CSS: 1.6s)
+        // 0.35s after glitch starts: shoot up + warp
         setTimeout(() => {
-          introTitle.classList.remove('fade-in', 'shoot-up');
-          introTitle.style.display = 'none';
-          startIntroSequence();
-        }, 400);
-      }, 550);
-    }, 1000);
-  }, 100);
-}
+          introTitle.classList.add('shoot-up');
+          warpStars();
 
-  window.addEventListener('scroll', handleFirstScroll, { once: true });
+          // after shoot-up transition (matches CSS: 1.6s)
+          setTimeout(() => {
+            introTitle.classList.remove('fade-in', 'shoot-up');
+            introTitle.style.display = 'none';
+            startIntroSequence();
+          }, 400);
+        }, 550);
+      }, 1000);
+    }, 100);
+  }
+
+  window.addEventListener('wheel', handleFirstScroll, { once: true });
+
+  // window.addEventListener('scroll', handleFirstScroll, { once: true });
 
   // Star warp effect: fast acceleration, slower deceleration, UI reveal is independent
   function warpStars() {
@@ -311,27 +313,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 60); // ~60ms per char
   }
 
-  function changePage(newTitle, newText) {
-    // Fade out box and its contents (but not the title)
-    floatingBox.classList.remove('visible');
-    floatingBox.classList.remove('background-visible');
-    // Do NOT remove .visible from pageTitle
+  function changePage(newTitle, targetId) {
+    // Fade out box + contents
+    floatingBox.classList.remove('visible', 'background-visible');
     pageSubtitle.classList.remove('visible');
-    Array.from(pageText.querySelectorAll('.text-line')).forEach(l => l.classList.remove('visible'));
+    Array.from(pageText.querySelectorAll('.text-line')).forEach(l =>
+      l.classList.remove('visible')
+    );
 
+    // Title typing
     pageTitle.classList.remove('visible');
     setTimeout(() => {
       pageTitle.classList.add('visible');
       typeTitle(newTitle);
     }, 500);
-    // After 1s: type new title and update subtitle/text
+
+    // After 1s: update subtitle + content
     setTimeout(() => {
       pageSubtitle.textContent = "Analysis and Visualization";
-      // Update text lines
-      pageText.innerHTML = newText.split('\n').map(line => `<span class='text-line'>${line}</span>`).join('<br>');
-      // Fade in box
-      floatingBox.classList.add('visible');
-      floatingBox.classList.add('background-visible');
+
+      const source = document.getElementById(targetId);
+      pageText.innerHTML = source ? source.innerHTML : "";
+
+      floatingBox.classList.add('visible', 'background-visible');
     }, 1000);
 
     // After 1.5s: fade in subtitle
@@ -350,13 +354,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 2000);
   }
 
+
   navLinks.forEach(link => {
     link.addEventListener('click', () => {
       const newTitle = link.getAttribute('data-title') || "2001: A Space Odyssey";
-      const newText = link.getAttribute('data-text') || "Placeholder section text.";
-      changePage(newTitle, newText);
+      const targetId = link.getAttribute('data-target');
+      changePage(newTitle, targetId);
     });
   });
+
 
   // Robust scroll reset for intro animation
   function resetScroll() {

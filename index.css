@@ -10,6 +10,7 @@ body {
   border: 0;
   height: 100%;
   background: transparent;
+  scrollbar-width: none;
 }
 
 body::-webkit-scrollbar {
@@ -101,9 +102,21 @@ body::-webkit-scrollbar {
 }
 
 @keyframes glowFlash {
-  0%, 100% { filter: none; }
-  20%, 60% { filter: drop-shadow(0 0 18px #fff) drop-shadow(0 0 32px #fff); }
-  40%, 80% { filter: none; }
+
+  0%,
+  100% {
+    filter: none;
+  }
+
+  20%,
+  60% {
+    filter: drop-shadow(0 0 18px #fff) drop-shadow(0 0 32px #fff);
+  }
+
+  40%,
+  80% {
+    filter: none;
+  }
 }
 
 #introYear {
@@ -173,22 +186,27 @@ body::-webkit-scrollbar {
     transform: translate(0, 0);
     clip-path: inset(0 0 0 0);
   }
+
   20% {
     transform: translate(-3px, 2px);
     clip-path: inset(50% 0 20% 0);
   }
+
   40% {
     transform: translate(2px, -1px);
     clip-path: inset(20% 0 60% 0);
   }
+
   60% {
     transform: translate(-2px, 1px);
     clip-path: inset(80% 0 5% 0);
   }
+
   80% {
     transform: translate(2px, -2px);
     clip-path: inset(30% 0 45% 0);
   }
+
   100% {
     transform: translate(0, 0);
     clip-path: inset(0 0 0 0);
@@ -198,31 +216,56 @@ body::-webkit-scrollbar {
 /* Flicker animations reused */
 
 @keyframes hintFlicker {
-  0%, 100% { opacity: 0; }
-  25%, 75% { opacity: 1; }
-  50% { opacity: 0; }
+
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  25%,
+  75% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
 }
 
 @keyframes introFlicker {
-  0%, 100% { opacity: 0; }
-  20%, 60% { opacity: 1; }
-  40%, 80% { opacity: 0; }
+
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  20%,
+  60% {
+    opacity: 1;
+  }
+
+  40%,
+  80% {
+    opacity: 0;
+  }
 }
 
 /* ---- Fixed Header + Navbar ---- */
 
 #mainHeader {
-  position: fixed;       /* stays fixed, never stops */
+  position: fixed;
+  /* stays fixed, never stops */
   top: 0;
   left: 0;
   width: 100%;
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem 0;
   display: flex;
   justify-content: center;
   backdrop-filter: blur(2.8px) brightness(1.1) contrast(1.15);
   background: rgba(0, 0, 0, 0.1);
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
-  opacity: 0;            /* revealed after intro */
+  opacity: 0;
+  /* revealed after intro */
   pointer-events: none;
   transition: opacity 1s ease;
   z-index: 50;
@@ -249,20 +292,285 @@ body::-webkit-scrollbar {
   text-transform: uppercase;
   cursor: pointer;
   transition: background 0.3s ease, transform 0.3s ease,
-    box-shadow 0.3s ease;
+    box-shadow 0.3s ease, text-shadow 0.5s ease;
+  transition: text-shadow 0.5s ease;
 }
 
-.nav-link:hover {
-  transform: translateY(-1px);
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
+/* === Galaxy / shooting-star animation inside navbar buttons === */
+
+.nav-link {
+  position: relative;
+  overflow: hidden;
+  /* keep stars inside the pill */
 }
+
+/* Text inside nav button (reuse Universe .text but without extra padding) */
+.nav-link .text {
+  position: relative;
+  display: inline-block;
+  letter-spacing: 0.01ch;
+  color: hsl(0 0% 60%);
+  z-index: 2;
+  font-weight: 600;
+  transition: text-shadow 1s ease;
+}
+
+/* Shooting star trails on hover */
+.nav-link .text::before,
+.nav-link .text::after {
+  content: "";
+  position: absolute;
+  top: -290%;
+  width: 5em;
+  height: 1px;
+  rotate: -45deg;
+  background: linear-gradient(90deg, #ffffff, transparent);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.nav-link .text::before {
+  left: 90%;
+  animation: shootingStar 4s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+.nav-link .text::after {
+  left: 10%;
+  animation: shootingStar 7s ease-in-out infinite;
+  animation-delay: 3s;
+}
+
+.nav-link:hover .text::before,
+.nav-link:hover .text::after {
+  opacity: 1;
+}
+
+/* Galaxy starfield layer */
+.nav-link .galaxy {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease, text-shadow 0.5s ease;
+}
+
+.nav-link:hover .galaxy,
+.nav-link:focus-visible .galaxy {
+  opacity: 1;
+}
+
+/* Stars (Universe.io box-shadow hack) */
+.nav-link .galaxy::before,
+.nav-link .galaxy::after {
+  content: "";
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  opacity: 1;
+  box-shadow:
+    140px 20px #fff,
+    425px 20px #fff,
+    70px 120px #fff,
+    20px 130px #fff,
+    110px 80px #fff,
+    280px 80px #fff,
+    250px 350px #fff,
+    280px 230px #fff,
+    220px 190px #fff,
+    450px 100px #fff,
+    380px 80px #fff,
+    520px 50px #fff;
+  animation: glowing-stars 1s linear alternate infinite;
+}
+
+.nav-link .galaxy::after {
+  top: -150px;
+  left: -65px;
+  box-shadow:
+    490px 330px #fff,
+    420px 300px #fff,
+    320px 280px #fff,
+    380px 350px #fff,
+    546px 170px #fff,
+    420px 180px #fff,
+    370px 150px #fff,
+    200px 250px #fff,
+    80px 20px #fff,
+    190px 50px #fff,
+    270px 20px #fff,
+    120px 230px #fff,
+    350px -1px #fff,
+    150px 369px #fff;
+  animation-delay: 0.4s;
+}
+
+/* Soft background sheen behind text */
+.nav-link .backdrop {
+  position: absolute;
+  inset: 0;
+  /* fill the button */
+  border-radius: inherit;
+  /* big wide "planet" hugging the bottom */
+  background:
+    radial-gradient(160% 260% at 50% 140%,
+      /* very wide, pushed downward */
+      rgba(255, 255, 255, 0.16) 0%,
+      rgba(255, 255, 255, 0.06) 40%,
+      transparent 70%);
+  opacity: 0;
+  transition: opacity 0.25s ease, text-shadow 0.5s ease;
+  ;
+  z-index: 1;
+}
+
+.nav-link:hover .backdrop,
+.nav-link:focus-visible .backdrop {
+  opacity: 1;
+}
+
+/* Active press wobble/blur on text */
+.nav-link:hover .text {
+  animation:
+    wobble 0.6s ease-in-out infinite;
+}
+
+.nav-link:active .text {
+  animation:
+    blurMove 1.5s ease-in-out infinite;
+  text-shadow:
+    5px 5px 20px rgba(255, 255, 255, 0.8),
+    10px 10px 30px rgba(255, 199, 176, 0.6);
+}
+
+/* --- Keyframes from the original --- */
+
+@keyframes shootingStar {
+  0% {
+    transform: translateX(0) translateY(0);
+    opacity: 1;
+  }
+
+  50% {
+    transform: translateX(-55em) translateY(0);
+    opacity: 1;
+  }
+
+  70% {
+    transform: translateX(-70em) translateY(0);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(0) translateY(0);
+    opacity: 0;
+  }
+}
+
+@keyframes glowing-stars {
+  0% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes wobble {
+
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  25% {
+    transform: translate(-.2px, -1px);
+  }
+
+  50% {
+    transform: translate(.3px, 1px);
+  }
+
+  75% {
+    transform: translate(-.8px, 1px);
+  }
+}
+
+@keyframes blurMove {
+
+  0%,
+  100% {
+    filter: none;
+  }
+
+  50% {
+    filter: blur(1px);
+  }
+}
+
+/* Stagger starfall timing so each nav button is different */
+#navbar .nav-link:nth-child(1) .text::before {
+  animation-delay: 0.5s;
+}
+
+#navbar .nav-link:nth-child(1) .text::after {
+  animation-delay: 2.6s;
+}
+
+#navbar .nav-link:nth-child(2) .text::before {
+  animation-delay: 1.4s;
+}
+
+#navbar .nav-link:nth-child(2) .text::after {
+  animation-delay: 3.8s;
+}
+
+#navbar .nav-link:nth-child(3) .text::before {
+  animation-delay: 0.2s;
+}
+
+#navbar .nav-link:nth-child(3) .text::after {
+  animation-delay: 2.1s;
+}
+
+#navbar .nav-link:nth-child(4) .text::before {
+  animation-delay: 1.9s;
+}
+
+#navbar .nav-link:nth-child(4) .text::after {
+  animation-delay: 4.5s;
+}
+
+#navbar .nav-link:nth-child(5) .text::before {
+  animation-delay: 0.9s;
+}
+
+#navbar .nav-link:nth-child(5) .text::after {
+  animation-delay: 3.2s;
+}
+
+#navbar .nav-link:nth-child(6) .text::before {
+  animation-delay: 1.7s;
+}
+
+#navbar .nav-link:nth-child(6) .text::after {
+  animation-delay: 4.0s;
+}
+
 
 /* ---- Content Layout ---- */
 
 .content-section {
-  min-height: 250vh;      /* room for sticky effects */
-  padding-top: 18vh;      /* below the fixed header */
+  /* min-height: 250vh; */
+  /* room for sticky effects */
+  padding-top: 18vh;
+  /* below the fixed header */
 }
 
 .content-layout {
@@ -274,7 +582,8 @@ body::-webkit-scrollbar {
 /* Sticky title */
 .sticky-title {
   position: sticky;
-  top: 18vh;              /* just under header */
+  top: 18vh;
+  /* just under header */
   margin: 0;
   text-align: center;
   color: white;
@@ -294,7 +603,7 @@ body::-webkit-scrollbar {
   position: sticky;
   top: 32vh;
   margin-top: 2rem;
-  background: transparent;   
+  background: transparent;
   border-radius: 1.5rem;
   border: none;
   padding: 2rem;
@@ -318,18 +627,20 @@ body::-webkit-scrollbar {
 }
 
 /* Only animate subtitle and text for tab switching */
-#pageSubtitle, .text-line {
+#pageSubtitle,
+.text-line {
   opacity: 0;
   transition: opacity 0.7s ease;
 }
 
-#pageSubtitle.visible, .text-line.visible {
+#pageSubtitle.visible,
+.text-line.visible {
   opacity: 1;
 }
 
 /* Remove sticky positioning from the title */
 #pageTitle {
-  margin: 0 0 1.5rem 0;
+  margin: 0 0 5.5rem 0;
   font-size: 2.2rem;
   font-weight: bold;
   text-align: center;
