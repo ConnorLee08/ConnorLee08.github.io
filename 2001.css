@@ -1,0 +1,270 @@
+html {
+  height: 100%;
+  overflow: auto;
+  background-color: #000;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  height: 100%;
+  background: transparent;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+#backgroundCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000;
+  z-index: -1;
+}
+
+
+/* ---- Scroll Hint ---- */
+
+.scroll-hint {
+  position: fixed;
+  bottom: 3vh;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.5rem 1.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  color: white;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Mono",
+    "Fira Code", monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.scroll-hint.visible {
+  opacity: 1;
+}
+
+.scroll-hint.flicker {
+  animation: hintFlicker 1s ease-in-out infinite;
+}
+
+/* ---- Intro Title (2001 / A Space Odyssey) ---- */
+
+.intro-title {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Mono",
+    "Fira Code", monospace;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 80;
+  transition: opacity 1s ease, filter 0.5s ease, transform 1.6s cubic-bezier(0.4, 2.2, 0.2, 1);
+}
+
+.intro-title.show {
+  opacity: 1;
+}
+
+.intro-title.fade-in {
+  opacity: 1;
+  filter: none;
+}
+
+.intro-title.glow {
+  filter: drop-shadow(0 0 18px #fff) drop-shadow(0 0 32px #fff);
+}
+
+.intro-title.shoot-up {
+  transform: translate(-50%, -180vh) scaleY(1.2);
+  opacity: 0;
+  transition: transform 1.6s cubic-bezier(0.4, 2.2, 0.2, 1), opacity 0.8s;
+}
+
+.intro-title.flicker {
+  animation: introFlicker 1.2s ease-in-out 2;
+}
+
+@keyframes glowFlash {
+  0%, 100% { filter: none; }
+  20%, 60% { filter: drop-shadow(0 0 18px #fff) drop-shadow(0 0 32px #fff); }
+  40%, 80% { filter: none; }
+}
+
+#introYear {
+  display: block;
+  font-size: clamp(3rem, 8vw, 6rem);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+
+#introTitleText {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: clamp(1rem, 2.5vw, 1.6rem);
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+}
+
+/* Flicker animations reused */
+
+@keyframes hintFlicker {
+  0%, 100% { opacity: 0; }
+  25%, 75% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes introFlicker {
+  0%, 100% { opacity: 0; }
+  20%, 60% { opacity: 1; }
+  40%, 80% { opacity: 0; }
+}
+
+/* ---- Fixed Header + Navbar ---- */
+
+#mainHeader {
+  position: fixed;       /* stays fixed, never stops */
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  justify-content: center;
+  backdrop-filter: blur(2.8px) brightness(1.1) contrast(1.15);
+  background: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
+  opacity: 0;            /* revealed after intro */
+  pointer-events: none;
+  transition: opacity 1s ease;
+  z-index: 50;
+}
+
+#mainHeader.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#navbar {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-link {
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.nav-link:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
+}
+
+/* ---- Content Layout ---- */
+
+.content-section {
+  min-height: 250vh;      /* room for sticky effects */
+  padding-top: 18vh;      /* below the fixed header */
+}
+
+.content-layout {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem;
+}
+
+/* Sticky title */
+.sticky-title {
+  position: sticky;
+  top: 18vh;              /* just under header */
+  margin: 0;
+  text-align: center;
+  color: white;
+  font-size: 2.5rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.sticky-title.visible {
+  opacity: 1;
+}
+
+/* Floating translucent box */
+.floating-box {
+  position: sticky;
+  top: 32vh;
+  margin-top: 2rem;
+  background: transparent;   
+  border-radius: 1.5rem;
+  border: none;
+  padding: 2rem;
+  color: white;
+  backdrop-filter: blur(2.4px) brightness(1.4) contrast(1.2);
+  box-shadow: none;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 1s ease, transform 1s ease, background 0.7s ease, border 0.7s ease, box-shadow 0.7s ease;
+}
+
+.floating-box.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.floating-box.background-visible {
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Only animate subtitle and text for tab switching */
+#pageSubtitle, .text-line {
+  opacity: 0;
+  transition: opacity 0.7s ease;
+}
+
+#pageSubtitle.visible, .text-line.visible {
+  opacity: 1;
+}
+
+/* Remove sticky positioning from the title */
+#pageTitle {
+  margin: 0 0 1.5rem 0;
+  font-size: 2.2rem;
+  font-weight: bold;
+  text-align: center;
+  color: white;
+  letter-spacing: 0.12em;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+#pageTitle.visible {
+  opacity: 1;
+}

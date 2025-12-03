@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2001 Analysis</title>
+    <link href="./2001.css" rel="stylesheet" />
+</head>
+<body>
+  <canvas id="backgroundCanvas"></canvas>
+
+  
+
+  <!-- Scroll hint: flickers on load -->
+  <div id="scrollHint" class="scroll-hint">SCROLL TO ENTER</div>
+
+  <!-- Intro title: appears on first scroll, flashes twice, then hides -->
+  <div id="introTitle" class="intro-title">
+    <span id="introYear">2001</span>
+    <span id="introTitleText">A SPACE ODYSSEY</span>
+  </div>
+
+  <!-- Fixed header + navbar (shown after intro) -->
+  <header id="mainHeader">
+    <nav id="navbar">
+      <button class="nav-link" data-title="Dawn of Man"
+              data-text="Placeholder text: Dawn of Man sequence.">
+        Dawn of Man
+      </button>
+      <button class="nav-link" data-title="Space Station"
+              data-text="Placeholder text: Jupiter Mission sequence.">
+        Space Station
+      </button>
+      <button class="nav-link" data-title="The Moon"
+              data-text="Placeholder text: Beyond the Infinite sequence.">
+        The Moon
+      </button>
+      <button class="nav-link" data-title="Jupiter Mission: Hal's Retaliation"
+              data-text="Placeholder text: Dawn of Man sequence.">
+        Jupiter Mission: Hal's Retaliation
+      </button>
+      <button class="nav-link" data-title="Jupiter Mission: Hal's Shutdown"
+              data-text="Placeholder text: Dawn of Man sequence.">
+        Jupiter Mission: Hal's Shutdown
+      </button>
+      <button class="nav-link" data-title="Beyond the Infinite"
+              data-text="Placeholder text: Dawn of Man sequence.">
+        Beyond the Infinite
+      </button>
+    </nav>
+  </header>
+
+  <!-- Main scrollable content -->
+  <main>
+    <section class="content-section">
+      <div class="content-layout">
+        <!-- Title outside the floating box for persistent visibility -->
+        <h1 id="pageTitle">
+          2001: A Space Odyssey
+        </h1>
+        <!-- Sticky translucent box -->
+        <div id="floatingBox" class="floating-box">
+          <h2 id="pageSubtitle">Analysis and Visualization</h2>
+          <p id="pageText">
+            <span class="text-line">Placeholder analysis text goes here.</span><br>
+            <span class="text-line">This will be replaced when you click a navbar item.</span>
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="./2001.js"></script>
+</body>
+</html>
