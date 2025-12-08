@@ -1,12 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Reset scroll (like you had)
   setTimeout(() => {
     window.scrollTo(0, 0);
   }, 2);
-
-  // =========================
-  // STARFIELD BACKGROUND
-  // =========================
 
   const canvas = document.getElementById('backgroundCanvas');
   const ctx = canvas.getContext('2d');
@@ -103,7 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let scrollY = window.scrollY;
 
-  // Starfield parallax on scroll
   window.addEventListener('scroll', () => {
     if (window.scrollY < scrollY) {
       scrollStars(-0.5, true);
@@ -120,10 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
     drawStars();
   });
 
-  // =========================
-  // INTRO / SCROLL HINT / UI
-  // =========================
-
   const scrollHint = document.getElementById('scrollHint');
   const introTitle = document.getElementById('introTitle');
   const mainHeader = document.getElementById('mainHeader');
@@ -132,7 +122,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const pageText = document.getElementById('pageText');
   const navLinks = document.querySelectorAll('.nav-link');
 
-  // 1) Scroll-to-enter hint continuously flickers until first scroll
   function showScrollHint() {
     scrollHint.classList.add('visible', 'flicker');
     scrollHint.style.display = '';
@@ -143,11 +132,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   showScrollHint();
 
-  // 2) First scroll → show big 2001 / A SPACE ODYSSEY, fade in, glow twice, then shoot up and reveal main UI
   let introStarted = false;
-  let scrollDetectionEnabled = true; // Enable scroll detection immediately
+  let scrollDetectionEnabled = true;
 
-  // Prevent browser from restoring scroll position
   if ('scrollRestoration' in history) {
     history.scrollRestoration = 'manual';
   }
@@ -170,19 +157,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const main = document.getElementById("introYear");
     const sub = document.getElementById("introTitleText");
 
-    // remove existing glitch state
     main.classList.remove("glitch-active");
     sub.classList.remove("glitch-active");
 
-    // trigger reflow to restart animation
     void main.offsetWidth;
     void sub.offsetWidth;
 
-    // add glitch class back
     main.classList.add("glitch-active");
     sub.classList.add("glitch-active");
 
-    // remove after animation finishes (optional)
     setTimeout(() => {
       main.classList.remove("glitch-active");
       sub.classList.remove("glitch-active");
@@ -200,16 +183,13 @@ document.addEventListener('DOMContentLoaded', () => {
       introTitle.classList.add('fade-in');
       introTitle.style.display = '';
 
-      // 1s after showing title: play glitch
       setTimeout(() => {
         playTitleGlitch();
 
-        // 0.35s after glitch starts: shoot up + warp
         setTimeout(() => {
           introTitle.classList.add('shoot-up');
           warpStars();
 
-          // after shoot-up transition (matches CSS: 1.6s)
           setTimeout(() => {
             introTitle.classList.remove('fade-in', 'shoot-up');
             introTitle.style.display = 'none';
@@ -222,9 +202,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.addEventListener('wheel', handleFirstScroll, { once: true });
 
-  // window.addEventListener('scroll', handleFirstScroll, { once: true });
-
-  // Star warp effect: fast acceleration, slower deceleration, UI reveal is independent
   function warpStars() {
     let warpFrames = 0;
     const warpTotal = 360;
@@ -233,9 +210,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const t = warpFrames / warpTotal;
       let speed;
       if (t < 0.2) {
-        speed = 1.2 + 22 * (t / 0.2); // fast linear ramp up
+        speed = 1.2 + 22 * (t / 0.2);
       } else {
-        // cubic ease-out deceleration, slower
         const decelT = (t - 0.2) / 0.8;
         speed = 23.2 * Math.pow(1 - decelT, 3);
       }
@@ -250,7 +226,6 @@ document.addEventListener('DOMContentLoaded', () => {
     warpStep();
   }
 
-  // Ensure text lines are visible after intro
   function revealTextLines() {
     const lines = Array.from(pageText.querySelectorAll('.text-line'));
     lines.forEach((line, i) => {
@@ -266,7 +241,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
       mainHeader.classList.add('visible');
     }, 0);
-    // 1s: show only the title
     setTimeout(() => {
       pageTitle.classList.add('visible');
       floatingBox.classList.remove('background-visible');
@@ -274,19 +248,15 @@ document.addEventListener('DOMContentLoaded', () => {
       pageSubtitle.classList.remove('visible');
       Array.from(pageText.querySelectorAll('.text-line')).forEach(l => l.classList.remove('visible'));
     }, 500);
-    // 2s: fade in box (opacity: 1, still transparent)
     setTimeout(() => {
       floatingBox.classList.add('visible');
     }, 800);
-    // 2.5s: fade in box background, border, shadow
     setTimeout(() => {
       floatingBox.classList.add('background-visible');
     }, 1500);
-    // 3s: show subtitle
     setTimeout(() => {
       pageSubtitle.classList.add('visible');
     }, 2000);
-    // 3.5s: reveal text lines one by one
     setTimeout(() => {
       const lines = Array.from(pageText.querySelectorAll('.text-line'));
       lines.forEach((line, i) => {
@@ -297,10 +267,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 2500);
   }
 
-  // =========================
-  // NAVIGATION TRANSITIONS
-  // =========================
-
   function typeTitle(newTitle) {
     pageTitle.textContent = "";
     let index = 0;
@@ -310,25 +276,24 @@ document.addEventListener('DOMContentLoaded', () => {
       if (index >= newTitle.length) {
         clearInterval(interval);
       }
-    }, 60); // ~60ms per char
+    }, 60);
   }
 
   function changePage(newTitle, targetId) {
-    // Fade out box + contents
     floatingBox.classList.remove('visible', 'background-visible');
     pageSubtitle.classList.remove('visible');
     Array.from(pageText.querySelectorAll('.text-line')).forEach(l =>
       l.classList.remove('visible')
     );
 
-    // Title typing
+    forceScrollReset();
+
     pageTitle.classList.remove('visible');
     setTimeout(() => {
       pageTitle.classList.add('visible');
       typeTitle(newTitle);
     }, 500);
 
-    // After 1s: update subtitle + content
     setTimeout(() => {
       pageSubtitle.textContent = "Analysis and Visualization";
 
@@ -338,12 +303,10 @@ document.addEventListener('DOMContentLoaded', () => {
       floatingBox.classList.add('visible', 'background-visible');
     }, 1000);
 
-    // After 1.5s: fade in subtitle
     setTimeout(() => {
       pageSubtitle.classList.add('visible');
     }, 1500);
 
-    // After 2s: fade text lines in one by one
     setTimeout(() => {
       const lines = Array.from(pageText.querySelectorAll('.text-line'));
       lines.forEach((line, i) => {
@@ -364,14 +327,12 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 
-  // Robust scroll reset for intro animation
   function resetScroll() {
     window.scrollTo(0, 0);
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
   }
 
-  // Force scroll reset repeatedly for reliability
   function forceScrollReset() {
     let attempts = 0;
     function doReset() {

@@ -1,3 +1,14 @@
+* {
+  font-family: 'Eurostile', sans-serif;
+}
+
+@font-face {
+  font-family: 'EuroStyle';
+  font-style: normal;
+  font-weight: normal;
+  src: local('EuroStyle Normal'), url('EuroStyle Normal.woff') format('woff');
+}
+
 html {
   height: 100%;
   overflow: auto;
@@ -10,14 +21,14 @@ body {
   border: 0;
   height: 100%;
   background: transparent;
+}
+
+body {
+  -ms-overflow-style: none;
   scrollbar-width: none;
 }
 
 body::-webkit-scrollbar {
-  display: none;
-}
-
-.hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
 
@@ -30,9 +41,6 @@ body::-webkit-scrollbar {
   background-color: #000;
   z-index: -1;
 }
-
-
-/* ---- Scroll Hint ---- */
 
 .scroll-hint {
   position: fixed;
@@ -60,8 +68,6 @@ body::-webkit-scrollbar {
 .scroll-hint.flicker {
   animation: hintFlicker 2s ease-in-out infinite;
 }
-
-/* ---- Intro Title (2001 / A Space Odyssey) ---- */
 
 .intro-title {
   position: fixed;
@@ -213,8 +219,6 @@ body::-webkit-scrollbar {
   }
 }
 
-/* Flicker animations reused */
-
 @keyframes hintFlicker {
 
   0%,
@@ -250,11 +254,8 @@ body::-webkit-scrollbar {
   }
 }
 
-/* ---- Fixed Header + Navbar ---- */
-
 #mainHeader {
   position: fixed;
-  /* stays fixed, never stops */
   top: 0;
   left: 0;
   width: 100%;
@@ -265,7 +266,6 @@ body::-webkit-scrollbar {
   background: rgba(0, 0, 0, 0.1);
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
   opacity: 0;
-  /* revealed after intro */
   pointer-events: none;
   transition: opacity 1s ease;
   z-index: 50;
@@ -296,15 +296,11 @@ body::-webkit-scrollbar {
   transition: text-shadow 0.5s ease;
 }
 
-/* === Galaxy / shooting-star animation inside navbar buttons === */
-
 .nav-link {
   position: relative;
   overflow: hidden;
-  /* keep stars inside the pill */
 }
 
-/* Text inside nav button (reuse Universe .text but without extra padding) */
 .nav-link .text {
   position: relative;
   display: inline-block;
@@ -315,7 +311,6 @@ body::-webkit-scrollbar {
   transition: text-shadow 1s ease;
 }
 
-/* Shooting star trails on hover */
 .nav-link .text::before,
 .nav-link .text::after {
   content: "";
@@ -346,7 +341,6 @@ body::-webkit-scrollbar {
   opacity: 1;
 }
 
-/* Galaxy starfield layer */
 .nav-link .galaxy {
   position: absolute;
   inset: 0;
@@ -360,7 +354,6 @@ body::-webkit-scrollbar {
   opacity: 1;
 }
 
-/* Stars (Universe.io box-shadow hack) */
 .nav-link .galaxy::before,
 .nav-link .galaxy::after {
   content: "";
@@ -406,16 +399,12 @@ body::-webkit-scrollbar {
   animation-delay: 0.4s;
 }
 
-/* Soft background sheen behind text */
 .nav-link .backdrop {
   position: absolute;
   inset: 0;
-  /* fill the button */
   border-radius: inherit;
-  /* big wide "planet" hugging the bottom */
   background:
     radial-gradient(160% 260% at 50% 140%,
-      /* very wide, pushed downward */
       rgba(255, 255, 255, 0.16) 0%,
       rgba(255, 255, 255, 0.06) 40%,
       transparent 70%);
@@ -430,7 +419,6 @@ body::-webkit-scrollbar {
   opacity: 1;
 }
 
-/* Active press wobble/blur on text */
 .nav-link:hover .text {
   animation:
     wobble 0.6s ease-in-out infinite;
@@ -443,8 +431,6 @@ body::-webkit-scrollbar {
     5px 5px 20px rgba(255, 255, 255, 0.8),
     10px 10px 30px rgba(255, 199, 176, 0.6);
 }
-
-/* --- Keyframes from the original --- */
 
 @keyframes shootingStar {
   0% {
@@ -514,7 +500,6 @@ body::-webkit-scrollbar {
   }
 }
 
-/* Stagger starfall timing so each nav button is different */
 #navbar .nav-link:nth-child(1) .text::before {
   animation-delay: 0.5s;
 }
@@ -563,14 +548,8 @@ body::-webkit-scrollbar {
   animation-delay: 4.0s;
 }
 
-
-/* ---- Content Layout ---- */
-
 .content-section {
-  /* min-height: 250vh; */
-  /* room for sticky effects */
   padding-top: 18vh;
-  /* below the fixed header */
 }
 
 .content-layout {
@@ -579,11 +558,9 @@ body::-webkit-scrollbar {
   padding: 4rem 1.5rem;
 }
 
-/* Sticky title */
 .sticky-title {
   position: sticky;
   top: 18vh;
-  /* just under header */
   margin: 0;
   text-align: center;
   color: white;
@@ -598,7 +575,6 @@ body::-webkit-scrollbar {
   opacity: 1;
 }
 
-/* Floating translucent box */
 .floating-box {
   position: sticky;
   top: 32vh;
@@ -626,7 +602,6 @@ body::-webkit-scrollbar {
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.3);
 }
 
-/* Only animate subtitle and text for tab switching */
 #pageSubtitle,
 .text-line {
   opacity: 0;
@@ -638,7 +613,6 @@ body::-webkit-scrollbar {
   opacity: 1;
 }
 
-/* Remove sticky positioning from the title */
 #pageTitle {
   margin: 0 0 5.5rem 0;
   font-size: 2.2rem;
@@ -652,4 +626,45 @@ body::-webkit-scrollbar {
 
 #pageTitle.visible {
   opacity: 1;
+}
+
+.image-row {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.content-image {
+  width: 100%;
+  resize: both;
+  object-fit: contain;
+  border-radius: 1rem;
+  margin: 2rem 0;
+}
+
+.content-image-small {
+  vertical-align: top;
+  width: 46%;
+  resize: both;
+  object-fit: contain;
+  border-radius: 1rem;
+  margin: 2rem 0;
+}
+
+a {
+  color: #fff;
+  text-decoration: underline;
+  transition: 0.5s ease;
+}
+
+a:hover {
+  color: #a29bfe;
+}
+
+a:visited {
+  color: #ecc1c1;
+}
+
+a:active {
+  color: #bca3e9;
 }
