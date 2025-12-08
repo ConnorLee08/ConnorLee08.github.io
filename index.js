@@ -9,7 +9,16 @@ document.addEventListener('DOMContentLoaded', () => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
+  const floaterLayer = document.getElementById('floaterLayer');
+
   const stars = [];
+
+  const floaters = [];
+  const FLOATER_MAX_VH = 0.09;
+  const FLOATER_SRC = 'images/frank.gif';
+
+  let floatersEnabled = false;
+
 
   function generateStars() {
     for (let i = 0; i < 200; i++) {
@@ -25,7 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function drawStars() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (const star of stars) {
       ctx.fillStyle = star.color;
       ctx.beginPath();
@@ -33,6 +41,12 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.fill();
     }
   }
+
+  function renderScene() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawStars();
+  }
+
 
   function randomInt(min, max) {
     return Math.floor(Math.random() * max) + min;
@@ -89,13 +103,122 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   generateStars();
-  drawStars();
+  renderScene();
 
   setInterval(() => {
     moveStars();
-    drawStars();
+    updateFloaters();
+    renderScene();
   }, 50);
 
+  setInterval(() => {
+    if (floatersEnabled && Math.random() < 0.08) {
+      createFloater();
+    }
+  }, 1000);
+
+
+
+  function createFloater() {
+    if (!floatersEnabled) return;
+
+    const canvasWidth = canvas.width;
+    const canvasHeight = canvas.height;
+    const maxPixelSize = canvasHeight * FLOATER_MAX_VH;
+
+    const baseSize = maxPixelSize * (0.7 + Math.random() * 0.3);
+
+    const edge = Math.floor(Math.random() * 4);
+
+    let startX, startY;
+    switch (edge) {
+      case 0:
+        startX = Math.random() * canvasWidth;
+        startY = -baseSize;
+        break;
+      case 1:
+        startX = canvasWidth + baseSize;
+        startY = Math.random() * canvasHeight;
+        break;
+      case 2:
+        startX = Math.random() * canvasWidth;
+        startY = canvasHeight + baseSize;
+        break;
+      case 3:
+      default:
+        startX = -baseSize;
+        startY = Math.random() * canvasHeight;
+        break;
+    }
+
+    const targetX = (Math.random() * 1.4 - 0.2) * canvasWidth;
+    const targetY = (Math.random() * 1.4 - 0.2) * canvasHeight;
+
+    const dx = targetX - startX;
+    const dy = targetY - startY;
+    const dist = Math.max(Math.hypot(dx, dy), 1);
+
+    const speed = 2.5 + Math.random() * 2.5;
+    const vx = (dx / dist) * speed;
+    const vy = (dy / dist) * speed;
+
+    const el = document.createElement('img');
+    el.src = FLOATER_SRC;
+    el.className = 'floater-gif';
+    el.style.width = `${baseSize}px`;
+    el.style.height = 'auto';
+
+    floaterLayer.appendChild(el);
+
+    floaters.push({
+      el,
+      x: startX,
+      y: startY,
+      vx,
+      vy,
+      baseSize,
+      scale: 0.7,
+      dScale: 0.003 + Math.random() * 0.003,
+      angle: Math.random() * Math.PI * 2,
+      dAngle: (Math.random() - 0.5) * 0.06,
+    });
+  }
+
+  function updateFloaters() {
+    const canvasWidth = canvas.width;
+    const canvasHeight = canvas.height;
+    const maxPixelSize = canvasHeight * FLOATER_MAX_VH;
+
+    for (let i = floaters.length - 1; i >= 0; i--) {
+      const f = floaters[i];
+
+      f.x += f.vx;
+      f.y += f.vy;
+
+      const maxScale = maxPixelSize / f.baseSize;
+      f.scale = Math.min(f.scale + f.dScale, maxScale);
+
+      f.angle += f.dAngle;
+
+      const tx = f.x - f.baseSize / 2;
+      const ty = f.y - f.baseSize / 2;
+      f.el.style.transform =
+        `translate(${tx}px, ${ty}px) rotate(${f.angle}rad) scale(${f.scale})`;
+
+      const padding = 100;
+      if (
+        f.x < -padding ||
+        f.x > canvasWidth + padding ||
+        f.y < -padding ||
+        f.y > canvasHeight + padding
+      ) {
+        if (f.el.parentNode === floaterLayer) {
+          floaterLayer.removeChild(f.el);
+        }
+        floaters.splice(i, 1);
+      }
+    }
+  }
   let scrollY = window.scrollY;
 
   window.addEventListener('scroll', () => {
@@ -105,13 +228,13 @@ document.addEventListener('DOMContentLoaded', () => {
       scrollStars(0.5, false);
     }
     scrollY = window.scrollY;
-    drawStars();
+    renderScene();
   });
 
   window.addEventListener('resize', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    drawStars();
+    renderScene();
   });
 
   const scrollHint = document.getElementById('scrollHint');
@@ -217,7 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       lastSpeed = speed;
       scrollStars(speed, true);
-      drawStars();
+      renderScene();
       warpFrames++;
       if (warpFrames < warpTotal) {
         requestAnimationFrame(warpStep);
@@ -265,6 +388,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }, i * 350);
       });
     }, 2500);
+
+    floatersEnabled = true;
   }
 
   function typeTitle(newTitle) {

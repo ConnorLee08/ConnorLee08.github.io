@@ -42,9 +42,25 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: #000;
+  background-color: transparent;
   z-index: -1;
 }
+
+#floaterLayer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -2;
+}
+
+.floater-gif {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  transform-origin: center center;
+}
+
 
 .scroll-hint {
   position: fixed;

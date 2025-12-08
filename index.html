@@ -7,19 +7,15 @@
     <link href="./index.css" rel="stylesheet" />
   </head>
   <body>
+    <div id="floaterLayer"></div>
     <canvas id="backgroundCanvas"></canvas>
-
-    <!-- Scroll hint: flickers on load -->
     <div id="scrollHint" class="scroll-hint">SCROLL TO ENTER</div>
-
-    <!-- Intro title: appears on first scroll, flashes twice, then hides -->
     <div id="introTitle" class="intro-title glitch-title-wrapper">
       <span id="introYear" class="glitch-title" data-text="2001">2001</span>
       <span id="introTitleText" class="glitch-title"
         data-text="A SPACE ODYSSEY">A SPACE ODYSSEY</span>
     </div>
 
-    <!-- Fixed header + navbar (shown after intro) -->
     <header id="mainHeader">
       <nav id="navbar">
         <button class="nav-link" data-title="Dawn of Man"
@@ -67,15 +63,12 @@
 
     </header>
 
-    <!-- Main scrollable content -->
     <main>
       <section class="content-section">
         <div class="content-layout">
-          <!-- Title outside the floating box for persistent visibility -->
           <h1 id="pageTitle">
             2001: A Space Odyssey Explained
           </h1>
-          <!-- Sticky translucent box -->
           <div id="floatingBox" class="floating-box">
             <h2 id="pageSubtitle">About The Website</h2>
             <p id="pageText">
@@ -299,9 +292,11 @@
               crew and audience could trust. Now, the audience is uneasy with
               HAL and suspicious of what it may do next.</p>
             <div class="image-row">
-              <img class="content-image-small text-line" src="images/pod attacks.png"
+              <img class="content-image-small text-line"
+                src="images/pod attacks.png"
                 alt="Hal's Eye Still">
-              <img class="content-image-small text-line" src="images/poole distress.png"
+              <img class="content-image-small text-line"
+                src="images/poole distress.png"
                 alt="Conversation Still">
             </div>
             <p class="text-line">In the next scene, Poole goes out of the
@@ -319,9 +314,11 @@
               drifted with nothing to hold on to.
             </p>
             <div class="image-row">
-              <img class="content-image-small text-line" src="images/HAL-9000.png"
+              <img class="content-image-small text-line"
+                src="images/HAL-9000.png"
                 alt="Hal's Eye Still">
-              <img class="content-image-small text-line" src="images/conversation.jpg"
+              <img class="content-image-small text-line"
+                src="images/conversation.jpg"
                 alt="Conversation Still">
             </div>
             <p class="text-line">The scene also contains a shot of the space pod
